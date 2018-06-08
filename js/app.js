@@ -22,8 +22,6 @@ Enemy.prototype.update = function(dt) {
         this.x = -60;
         this.speed = 100 + Math.floor((Math.random() * 100) + 1); //Source: https://www.w3schools.com/jsref/jsref_random.asp
     }
-
-
 };
 
 // Draw the enemy on the screen, required method for game
@@ -35,8 +33,8 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
-// creating a Player with x,y coordinates
-var Player = function(x,y,score = 0) {
+// creating a Player with x,y coordinates and score
+var Player = function(x,y,score) {
     this.x=x;
     this.y=y;
     this.sprite = 'images/char-boy.png'
@@ -57,7 +55,17 @@ Player.prototype.update = function(dt){
         this.y = 0;
         setTimeout(function() {
             player.restart();
-            player.score +=1;
+            player.score +=1; 
+            //adding functionality to add more random bugs to the lanes after a player reaches more than 10 in the score
+            if(player.score ===10 || player.score ===20 || player.score ===30 ){
+                addBugs = getRandomInt(1,4);
+                lane = [60,140,225];
+                for(i=0;i<addBugs;i++){
+                    allEnemies.push(new Enemy(0,lane[addBugs],getRandomInt(50,150)));
+                    console.log(allEnemies);
+                }
+            }
+            console.log (player.score);
         },60);
     }
 };
@@ -65,7 +73,7 @@ Player.prototype.update = function(dt){
 Player.prototype.render = function(){
     ctx.drawImage(Resources.get(this.sprite),this.x,this.y);
 };
-
+//function to handle movements on the grid 
 Player.prototype.handleInput = function(arrowKey){
     if(arrowKey == 'right'){
         this.x +=100;
@@ -80,7 +88,7 @@ Player.prototype.handleInput = function(arrowKey){
         this.y +=85;
     }
 };
-//reseting the player position 
+//restarting the player position 
 Player.prototype.restart = function () {
     this.x = 200;
     this.y = 400;
@@ -95,13 +103,15 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
   }
-var randomInt1 = getRandomInt(50,150);
-var randomInt2 = getRandomInt(50,150);
-var randomInt3 = getRandomInt(50,150);
-var allEnemies = [new Enemy(0,60,randomInt1), new Enemy(0, 140,randomInt2), new Enemy(0, 225,randomInt3)];
-var player = new Player(200,400);
-// Place the player object in a variable called player
 
+var randomSpeed1 = getRandomInt(50,150);
+var randomSpeed2 = getRandomInt(50,150);
+var randomSpeed3 = getRandomInt(50,150);
+var allEnemies = [new Enemy(0,60,randomSpeed1), new Enemy(0, 140,randomSpeed2), new Enemy(0, 225,randomSpeed3)];
+
+
+// Place the player object in a variable called player
+var player = new Player(200,400,0);
 
 
 // This listens for key presses and sends the keys to your
@@ -116,11 +126,6 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
- function moreBugs(){
-    addBugs = getRandomInt(1,10);
-    for(i=0;i<addBugs;i++){
-        allEnemies.push(new Enemy(0,225,getRandomInt(50,150)));
-    }
-}
+
     
-}
+
