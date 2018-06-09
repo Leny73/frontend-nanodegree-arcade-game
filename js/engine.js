@@ -94,6 +94,7 @@ var Engine = (function(global) {
             if(enemy.x< player.x+60 && enemy.x+60 >player.x && enemy.y < player.y+40 && enemy.y+40 >player.y){
                 player.restart();
                 player.score =0;
+                alert("GAME OVER! Your score is "+player.score)
             }
         });
     }
