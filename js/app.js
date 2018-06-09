@@ -1,3 +1,4 @@
+'use strict;'
 // Enemies our player must avoid
 var Enemy = function(x,y,speed) {
     // Variables applied to each of our instances go here,
@@ -37,7 +38,7 @@ Enemy.prototype.render = function() {
 var Player = function(x,y,score) {
     this.x=x;
     this.y=y;
-    this.sprite = 'images/char-boy.png'
+    this.sprite = 'images/char-boy.png';
     this.score = score;
 };
 /*handling the player to be only in the canvas*/ 
@@ -53,19 +54,21 @@ Player.prototype.update = function(dt){
     }
     if (this.y < 0) {
         this.y = 0;
+        var self = this;
         setTimeout(function() {
-            player.restart();
-            player.score +=1; 
+            self.restart();
+            self.score +=1;
             //adding functionality to add more random bugs to the lanes after a player reaches more than 10 in the score
-            if(player.score ===10 || player.score ===20 || player.score ===30 ){
+            if(self.score ===10 || self.score ===20 || self.score ===30 ){
                 addBugs = getRandomInt(1,4);
                 lane = [60,140,225];
                 for(i=0;i<addBugs;i++){
                     allEnemies.push(new Enemy(0,lane[addBugs],getRandomInt(50,150)));
                     console.log(allEnemies);
                 }
+                alert("Congratulations you've passed a level! Brace yourself your score is "+self.score);                
             }
-            console.log (player.score);
+            console.log (self.score);
         },60);
     }
 };
@@ -126,6 +129,12 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+player.score, 8, 20);
+}
 
     
 
